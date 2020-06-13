@@ -81,11 +81,11 @@ Sub App_evalJobResponse(Resp As JobResponse)
 		If Resp.success Then
 			Select Resp.jobNr
 				Case 1
-					'Log(Resp.ResponseString)
 					Dim match As Matcher
 					match = Regex.Matcher("<\S+[^>]*class=""[^""]*follower[^""]*""[^>]*>\s*<span[^>]*class=""[^""]*num[^""]*""[^>]*>(.*?)</span>", Resp.ResponseString)
 					If match.Find() Then
 						Dim follower_str As String = match.Group(1)
+						' replace &#x*** to [***]
 						follower_str = Regex.Replace("<i\s*class=""[^""]*iconfont[^""]*""[^>]*>\s*&#x([a-zA-Z0-9]{4});\s*</i>",follower_str,"[$1]")
 						
 						'0:$E603,$E60D,$E616
@@ -110,7 +110,7 @@ Sub App_evalJobResponse(Resp As JobResponse)
 						follower_str = Regex.Replace("\[(e609|e615|e61e)\]",follower_str,"9")
 						'
 						follower_str = Regex.Replace("\s",follower_str,"")
-						'w
+						'w->W
 						follower_str = Regex.Replace("w",follower_str,"W")
 						subs = follower_str
 					Else
@@ -128,7 +128,5 @@ End Sub
 'Generate your Frame. This Sub is called with every Tick
 Sub App_genFrame
 	App.genText(subs,True,1,Null,True)
-	
 	App.drawBMP(0,0,App.getIcon(758),8,8)
-    'App.drawLine(9,7,29,7,Array As Int(98,214,255))
 End Sub
